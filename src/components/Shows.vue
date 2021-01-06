@@ -1,12 +1,35 @@
 <template>
   <div>
-    From Shows component
+    <v-carousel hide-delimiters>
+      <v-carousel-item
+        v-for="(popularShow, i) in popularShows"
+        :key="i"
+        :src="popularShow.image.medium"
+      ></v-carousel-item>
+    </v-carousel>
+    <v-sheet
+      class="mx-auto"
+      elevation="8"
+      v-for="(generShow, i) in allTvShowsByGeneres"
+      :key="i"
+    >
+      <div>{{ generShow.name }}</div>
+      <v-slide-group class="pa-4" center-active show-arrows>
+        <v-slide-item v-for="(show, i) in generShow.list" :key="i">
+          <shows-card :show="show"></shows-card>
+        </v-slide-item>
+      </v-slide-group>
+    </v-sheet>
   </div>
 </template>
 <script>
 import Shows from "@/apis/Shows.js";
+import ShowsCard from "@/components/ShowsCard.vue";
 export default {
   name: "Shows",
+  components: {
+    ShowsCard
+  },
   data() {
     return {
       popularRating: 9,
@@ -25,7 +48,12 @@ export default {
           uniqueGenres,
           allTvShows.data
         );
-        console.log(allTvShows, uniqueGenres, this.popularShows);
+        console.log(
+          allTvShows,
+          uniqueGenres,
+          this.popularShows,
+          this.allTvShowsByGeneres
+        );
       }
     },
     getUniqueGenres(allShows) {
